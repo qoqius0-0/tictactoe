@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --RESULT-DIALOG-WIDTH: min(85vw, 500px);
+  --NAMES-DIALOG-WIDTH: min(85vw, 700px);
+  --HEADER-WIDTH: min(90vw, 550px);
+  --GAMEBOARD-SIDE: min(90vw, 470px);
+
+  --TITLE-FS: clamp(3rem, 13vw, 4.5rem);
+  --TURN-MSG-FS: clamp(1.5rem, 10vw, 2.5rem);
+  --PLAYER-SYMBOL-FS: clamp(2rem, 15vw, 5rem);
+  --FOOTER-FS: clamp(1rem, 5vw, 1.2rem);
+  --RESULT-DIALOG-FS: clamp(1.2rem, 8vw, 2.3rem);
+
+  --PRIMARY: #ff7b54;
+  --PRIMARY-LIGHT: #ffb199;
+  --SECONDARY: #4cd137;
+  --SECONDARY-LIGHT: #7bed9f;
+}
+
+/* Animated Background */
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(270deg, #ffecd2, #fcb69f, #a1c4fd, #c2e9fb);
+  background-size: 800% 800%;
+  animation: gradientShift 20s ease infinite;
+  margin-bottom: 100px;
+  user-select: none;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* HEADER */
+header {
+  padding-top: 30px;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  margin: 0 auto;
+  padding: 20px 0;
+  width: var(--HEADER-WIDTH);
+  text-align: center;
+  font-size: var(--TITLE-FS);
+  background: var(--PRIMARY);
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+}
+
+header h1:hover {
+  transform: scale(1.05);
+}
+
+/* MAIN */
+main p {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: var(--TURN-MSG-FS);
+  font-weight: 600;
+  color: #222;
+  animation: fadeIn 1s ease;
+}
+
+main .gameboard {
+  width: var(--GAMEBOARD-SIDE);
+  height: var(--GAMEBOARD-SIDE);
+  margin: 0 auto 30px auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  animation: zoomIn 0.7s ease;
+}
+
+.gameboard .gamecell {
+  border: 2px solid #444;
+  font-size: var(--PLAYER-SYMBOL-FS);
+  cursor: pointer;
+  background: var(--SECONDARY-LIGHT);
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gameboard .gamecell:hover {
+  background: var(--SECONDARY);
+  transform: scale(1.1) rotate(-3deg);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+/* Winning cell animation */
+.gamecell.winner {
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px 2px #ffe600; }
+  to   { box-shadow: 0 0 25px 6px #ff9d00; }
+}
+
+main button {
+  display: block;
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 auto;
+  padding: 16px 60px;
+  border: none;
+  border-radius: 10px;
+  background: var(--PRIMARY);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+main button:hover {
+  background: var(--PRIMARY-LIGHT);
+  color: #333;
+  transform: translateY(-3px) scale(1.05);
+}
+
+/* DIALOG */
+dialog {
+  position: fixed;
+  border: none;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  user-select: none;
+  overflow: hidden;
+  animation: bounceIn 0.6s ease;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.result-dialog {
+  top: 300px;
+  left: calc(50% - (var(--RESULT-DIALOG-WIDTH) / 2));
+}
+
+.result-dialog h1 {
+  padding: 60px 10px;
+  width: var(--RESULT-DIALOG-WIDTH);
+  text-align: center;
+  font-size: var(--RESULT-DIALOG-FS);
+  font-weight: 700;
+  color: var(--PRIMARY);
+}
+
+.names-dialog {
+  top: 200px;
+  left: calc(50% - (var(--NAMES-DIALOG-WIDTH) / 2));
+}
+
+.names-dialog form {
+  padding: 40px 0 60px 0;
+  width: var(--NAMES-DIALOG-WIDTH);
+
+  display: grid;
+  row-gap: 40px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+}
+
+.names-dialog p.title {
+  grid-column: 1 / -1;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--PRIMARY);
+}
+
+.names-dialog p.player-name {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.names-dialog input {
+  width: 230px;
+  padding: 8px;
+  border: 2px solid #666;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.names-dialog input:focus {
+  border-color: var(--PRIMARY);
+  box-shadow: 0 0 8px var(--PRIMARY-LIGHT);
+}
+
+.names-dialog button {
+  grid-column: 1 / -1;
+  margin-top: 25px;
+  padding: 18px 60px;
+  background: var(--SECONDARY);
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+.names-dialog button:hover {
+  background: var(--SECONDARY-LIGHT);
+  color: #333;
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Animations */
+@keyframes zoomIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  80% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .names-dialog {
+    top: 100px;
+  }
+  .names-dialog form {
+    row-gap: 30px;
+    grid-template-columns: 1fr;
+  }
+  .names-dialog p.title {
+    font-size: clamp(1.5rem, 8vw, 2.2rem);
+  }
+  .names-dialog button {
+    padding-inline: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* FOOTER */
+footer {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  color: #333;
+  font-size: var(--FOOTER-FS);
+  user-select: text;
+}
